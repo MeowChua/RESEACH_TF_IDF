@@ -1,0 +1,335 @@
+{% extends 'base.html' %}
+{% block head %}
+<!-- Bootstrap core CSS -->
+<link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+<!-- Additional CSS Files -->
+<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/fontawesome.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templatemo-host-cloud.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/owl.css') }}">
+{% endblock %}
+    
+{% block body %}
+ <!-- ***** Preloader Start ***** -->
+ <div id="preloader">
+  <div class="jumper">
+      <div></div>
+      <div></div>
+      <div></div>
+  </div>
+</div>  
+<!-- ***** Preloader End ***** -->
+
+<!-- Header -->
+<header class="">
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><h2>Science <em>Project</em></h2></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <!-- <li class="nav-item active">
+          <a class="nav-link" href="index.html">Home
+            <span class="sr-only">(current)</span>
+          </a>
+        </li> -->
+        <li class="nav-item">
+          <a class="nav-link" style="cursor: pointer; font-size: 20px !important; font-weight: bold; color:#00bcd4;" onclick="changeToImg()" id="img">Image</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="cursor: pointer; font-size: 20px !important; font-weight: bold; " onclick="changeToText()" id="txt">Text File</a>
+        </li>
+      </ul>
+    </div>
+    <!-- <div class="functional-buttons">
+      <ul>
+        <li><a href="#">Log in</a></li>
+        <li><a href="#">Sign Up</a></li>
+      </ul>
+    </div> -->
+  </div>
+</nav>
+</header>
+
+<!-- Page Content -->
+<!-- Input Starts Here -->
+
+<div class="banner">
+  <form action="/" method="POST" enctype="multipart/form-data" onsubmit="return validateFile()">
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 offset-md-2">
+          <div class="header-text caption">
+            <h2 id="content">Input an Image</h2>
+            <div id="search-section">
+                <div class="input-group">
+                  <input type="file" class="form-control" name="file" accept=".jpeg,.jpg,.png,.txt" id="file">
+                  <input class="input-group-text" type="submit" value="Upload">
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </form>
+
+  <form action="/" method="POST" onsubmit="return addKey()">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 offset-md-2">
+          <div class="header-text caption">
+            <div id="search-section">
+                <div class="input-group">
+                  <input type="text" name="check" style="display: none !important; font-size: 0px !important" id="check" value="none"></div>
+                  <input class="input-group-text" type="submit" value="Camera" style="margin-top: 10px">
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>  
+  </form>
+</div>
+  <!-- Input Ends Here -->
+
+
+  <div class="services-section">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- N-grams Starts Here -->
+        <div class="col-md-3">
+          <div class="box2" style="padding:0px 50px 100px 10px">
+            <div class="content">
+              <div class="card" style="width: 18rem;">              
+                <!-- <img src="{{ filename }}" class="card-img-top" alt="Image here" style="height: 200px;"> -->
+                    <div class="card-header">
+                      N-grams results
+                    </div>
+                    <ul class="list-group list-group-flush">
+                      {%for i in range(0,lenNgram) %}
+                      <li class="list-group-item">{{(i+1)*25}}% : {{ngramName[i]}}</li>
+                      {%endfor%}
+                    </ul>
+                    <center>
+                      <div class="card-body">
+                        <input type="submit" class="btn btn-primary" value="Crawl Images">                        
+                      </div>
+                    </center>
+              </div>
+            </div>        
+          </div>      
+        </div>
+        <!-- N-grams Ends Here -->
+  
+        <!-- TF-IDF Starts Here -->
+        <div class="col-md-3">
+          <div class="box2" style="padding:0px 50px 100px 10px">
+            <div class="content">
+              <div class="card" style="width: 18rem;">              
+                <!-- <img src="{{ filename }}" class="card-img-top" alt="Image here" style="height: 200px;"> -->
+                   
+                    <div class="card-header">
+                      Tf-Idf results
+                    </div>                  
+                    <ul class="list-group list-group-flush">
+                      {%for i in range(0,lenTfIdf) %}
+                      <li class="list-group-item">{{(i+1)*25}}% : {{tfidfName[i]}}</li>
+                      {%endfor%}
+                    </ul>
+                    <center>
+                      <div class="card-body">
+                        <input type="submit" class="btn btn-primary" value="Crawl Images">   
+                      </div>
+                    </center>
+              </div>
+            </div>        
+          </div>      
+        </div>
+        <!-- TF-IDF Ends Here -->
+  
+        <!-- Chart Starts Here -->        
+        <div class="col-md-6">
+          <div class="row" style="padding: 0px 0px 30px 30px;">
+            <div class="card" style="width: 37rem;">
+              <div class="header">
+                  <h5 class="title">N-gram time</h5>
+              </div>
+              <div class="content">
+                <canvas id="Ngramchart" class="ct-chart ct-perfect-fourth"></canvas>
+              </div>
+          </div>
+        
+          <div class="row" style="padding: 15px 0px 30px 15px;">
+            <div class="card" style="width: 37rem;">
+              <div class="header">
+                  <h5 class="title">Tf-idf time</h5>
+              </div>
+              <div class="content">
+                <canvas id="TfIdfchart" class="ct-chart ct-perfect-fourth"></canvas>
+              </div>
+          </div>
+          </div>                
+        </div>   
+        <!-- Chart Ends Here --> 
+      </div>
+    </div>
+    </div>
+
+  
+
+
+
+<!-- Footer Starts Here -->
+<footer>
+<div class="container">
+  <div class="row">
+    <div class="col-md-5"></div>
+    <div class="col-md-7">
+      <div class="footer-item">
+        <div class="footer-heading">
+          <h2>About me</h2>
+        </div>
+        <ul class="footer-list">
+          <li>Phone: <a href="#">010-020-0560</a></li>
+          <li>Email: <a href="#">mail@company.com</a></li>
+          <li>Support: <a href="#">support@company.com</a></li>
+          <li>Website: <a href="#">www.company.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="sub-footer">
+        <p>Copyright &copy; 2020 Cloud Hosting Company
+  - Designed by <a rel="nofollow" href="https://templatemo.com">TemplateMo</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+</footer>
+<!-- Footer Ends Here -->
+
+<!-- Bootstrap core JavaScript -->
+<script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script>
+<script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+
+<!-- Additional Scripts -->
+<script src="{{ url_for('static', filename='assets/js/custom.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/js/owl.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/js/accordions.js')}}"></script>
+
+<script>
+  function show()
+  {
+    $(function()
+    {
+        $('#fileUpload').on('change',function ()
+        {
+            var filePath = $(this).val();
+            console.log(filePath);
+        });
+    });
+    console.log("run");
+    console.log(document.getElementById("inputfile").value);
+  }
+ 
+</script>
+
+
+<script language = "text/Javascript"> 
+cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field
+function clearField(t){                   //declaring the array outside of the
+if(! cleared[t.id]){                      // function makes it static and global
+    cleared[t.id] = 1;  // you could use true and false, but that's more typing
+    t.value='';         // with more chance of typos
+    t.style.color='#fff';
+    }
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script type="text/javascript">
+    var color = '#FF0018';
+    var test = ['{{resTimeNgramx[0]}}','{{resTimeNgramx[1]}}','{{resTimeNgramx[2]}}','{{resTimeNgramx[3]}}'];
+    
+    var name2 = 'N-gram';
+    $(function linefunction() {
+        var ctx = document.getElementById("Ngramchart").getContext('2d');
+            var linechart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["25%", "50%", "75%", "100%"],
+                //Tui muốn chạy loop trong đây nè
+                datasets: [{ data: test, fill: 'false', label: name2, borderColor: color, backgroundColor: color }]
+            }
+            })
+    });
+</script>
+
+<script type="text/javascript">
+  var color1 = '#FFA52C'
+  var test2 = ['{{resTimeTfIdfx[0]}}','{{resTimeTfIdfx[1]}}','{{resTimeTfIdfx[2]}}','{{resTimeTfIdfx[3]}}'];
+  var name22 = 'Tf-Idf';
+  $(function linefunction() {
+      var ctx = document.getElementById("TfIdfchart").getContext('2d');
+          var linechart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: ["25%", "50%", "75%", "100%"],
+              //Tui muốn chạy loop trong đây nè
+              datasets: [{ data: test2, fill: 'false', label: name22, borderColor: color1, backgroundColor: color1 }]
+          }
+          })
+  });
+
+  function changeToText()
+  {
+    document.getElementById("content").innerHTML = "Input a text file";
+    document.getElementById("txt").style.color = "#00bcd4";
+    document.getElementById("img").style.color = "white";
+
+  }
+
+  function changeToImg()
+  {
+    document.getElementById("content").innerHTML = "Input an image";
+    document.getElementById("txt").style.color = "white";
+    document.getElementById("img").style.color = "#00bcd4";
+
+  }
+
+  function validateFile()
+  {
+    var filename = document.getElementById("file").value;
+    if (document.getElementById('content').innerHTML == "Input a text file")
+    {
+      if (((filename.split("."))[filename.split(".").length - 1]).localeCompare('txt') == 0)
+        return true
+      else
+      {
+        alert("wrong format file");
+        return false;
+      }
+    }
+    else 
+    {
+      if (((filename.split("."))[filename.split(".").length - 1]).localeCompare('txt') == 0)
+      {
+        alert("wrong format file");
+        return false;
+      }
+      else
+        return true;
+    }
+    
+  }
+
+  function addKey()
+  {
+    document.getElementById("check").value = "cAm";
+    return true;
+  }
+</script>
+{% endblock %}
